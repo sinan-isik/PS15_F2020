@@ -1,0 +1,67 @@
+---
+title: "Problem Set 2 (Due 30 October)"
+author: "Prof. Matto Mildenberger, PS 15, UCSB"
+date: "Fall 2020"
+output: html_document
+---
+
+*Submit your HTML output and .Rmd file to Gauchospace by the deadline.*
+
+# Introduction: Reminders about R and Rmarkdown
+Please make sure you have downloaded this file (pset2.Rmd) to your computer and opened it in R Studio. By download, we do not mean you just clicked on it in your browser -- we mean you have saved the actual file to a directory on your computer (as pset2.Rmd, not as pset2.Rmd.txt!), and then opened it with RStudio. You should now be looking at the "raw" text of the .Rmd file. 
+
+If you need to re-orient yourself, please review the introductory material that pset 1 began with describing how to include R code "chunks" into this .rmd file.  Remember that when you "knit" the Rmd file, only the code written into code "chunks" will be executed and have its results integrated into the output html file. For example, the code chunk below provides a summary of the built-in dataset called cars. Take a look at the .rmd code that produces it, then click "knit" and see how it shows up in the outputted html file:
+
+```{r}
+summary(cars)
+```
+
+Please also remember that you will want to use the console to "try out" code to get it working. Once you get it working, copy the code that worked (not the results) over into a code chunk in your rmd.  Remember that the code within your rmd file has to be self-contained and include all the steps -- your rmd file will not "remember" what you did on your own in the console. When you click knit, it can only execute the code that was present in the rmd.  Do not copy the results from your console into your RMD file.  In addition, do not include large amounts of output in your writeup (i.e. don't print full datasets to the screen).
+
+Include both the code to get your answer and your answer in words.
+
+Finally, it is best to work will small amounts of code at a time: get some code working, copy it into the rmd as a code chunk, write your text answer (outside the code chunk) if needed, and check that the file will still knit properly. Do not proceed to answer more questions until you get the first bit working. This will save you huge headaches. 
+
+Make sure your final Rmd file knits correctly, and check as you work -- don't wait until the very end to try knitting your code.
+
+***
+
+## Question 1.  
+
+(a) Load the Fearon and Laitin data set (fl3.RData).
+
+(b) What are the names of the variables stored in this dataset? How many variables do you have? What is your sample size, given this data set? (PLEASE DO NOT PRINT THE WHOLE DATASET IN YOUR OUTPUT!)
+
+(c) The variable `pop1` is population, measured in thousands of people. Show the sample distribution of this variable. Specifically, create a density plot, and a boxplot. Remember, plots need to be labelled.
+
+(d)  Remark on the shape of the distribution (density plot) in part (c). Compute the median and mean of `pop1` and report their values in your code. Then add these values to your chart as lines. Comment on whether the mean and median are the same and explain why or why not.
+
+(e) Repeat (c) and (d), but this time show the distribution of log(pop1) using a density plot and a boxplot. Remark on the difference in shape when using the log of the variable. Are your mean and median closer together or farther apart? Why?
+
+In the same dataset, the variable `Oil` describes whether each country in the dataset is an oil exporter (Oil=1) or not (Oil=0). The variable `war` describes how many years from 1945 to 1999 that country had a civil war. The variable `ethfrac` is a measure of how fractionalized ethnic groups are in a given country -- specifically, it's the probability that two people randomly drawn from a given country are from the same (0) or different (1) groups. 
+
+(f) What is the mean value of war for oil exporters? What is the mean value of war for non oil exporters? What is the standard deviation for both groups? What does this difference in standard deviations suggest about how much variation there is in war for oil exporters versus non oil exporters?
+
+(g) Describe the ethfrac variable: what is the minimum and maximum? What is the mean value? What is the standard deviation? 
+
+(h) Say you believe that increased ethnic factionalization causes war. In this case, what is your independent and dependent variable? Make a scatterplot that shows the relationship between these two variables, including a regression line. Describe the relationship you find. What happens to the predicted number or wars as you move from no ethnic fractionalization to the highest possible value of ethnic fractionalization?
+
+
+## Question 2. 
+
+Suppose you have a random variable $X$ with expectation $E[X]=u$, and variance given by $s^2$. You then draw multiple observations from the same distribution. That is, you draw $X_1, X_2,..,X_n$, each a random variable wih expectation $u$ and variance $s^2$.
+
+(a) When you average these random variables together, what is it called? How do you write it mathematically?
+
+(b) What is the standard deviation of these random variables? How do you write it mathematically?
+
+(c) What is $E[\overline{X}]$? Explain with math and words.
+
+(d) What is $Var(\overline{X})$? 
+
+
+## Question 3.
+
+(a) In your own words, explain the difference between these terms and put them in a logical sequence: Estimate, Estimand, Estimator. Give one example of each.
+
+(b) If you repeatedly draw a sample and take a mean, how will the distribution of the mean change if the variance of the underlying population is small versus big? If your sample size is small versus big? Explain.
