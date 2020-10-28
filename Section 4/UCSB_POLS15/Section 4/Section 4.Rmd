@@ -1,0 +1,75 @@
+---
+title: "PS 15 Section 4"
+---
+
+##REMINDERS
+1. KNIT AS YOU GO!
+2. ALWAYS SET YOUR WORKING DIRECTORY FIRST
+3. MAKE SURE YOU KNOW WHAT YOUR VARIABLES ARE (X and Y, ORDER MATTERS)
+4. KEEP CHUNKS TOGETHER EVEN IF THE PROBLEM SET SAYS DIFFERENTLY
+5. PUT TEXTBOOK ANSWERS UNDER THE QUESTION
+6. YOU CAN WORK TOGETHER, BUT PLEASE WRITE ANSWERS IN YOUR OWN WORDS (object names too)
+
+STEP 1. GET AND SET WORKING DIRECTORY
+```{r}
+getwd()
+setwd("/home/jovyan/UCSB_POLS15/Section 4")
+```
+
+STEP 2. LOAD LUNG CAPACITY DATASET
+```{r}
+lungdata <- read.csv("lungcapdata.csv", header = T)
+
+class(lungdata$Age)
+# What type of variable is age?
+```
+
+STEP 3. PRODUCE A SCATTERPLOT WITH AGE ON HORIZONTAL AXIS, AND LUNG CAPACITY ON THE VERTICAL AXIS. IV? DV?
+```{r}
+plot(lungdata$Age, lungdata$LungCap, main = "Scatterplot of Age and Lung Capacity",
+     xlab = "Age", ylab = "Lung Capacity", 
+     las = 1) #las = 1 makes the labels on Y axis horizontal 
+```
+
+STEP 4. ADD A REGRESSION LINE TO THE PLOT
+```{r}
+plot(lungdata$Age, lungdata$LungCap, 
+     main = "Scatterplot of Age and Lung Capacity", 
+     xlab = "Age", ylab = "Lung Capacity", las = 1)
+
+model1 <- lm(lungdata$LungCap ~ lungdata$Age, data=lungdata)
+
+abline(model1, col = "hot pink", lwd = 2)
+```
+
+STEP 5. ESTIMATE AND REPORT THE CORRELATION AND THE COVARIANCE OF "AGE" WITH "LUNGCAP"
+```{r}
+cor(lungdata$Age, lungdata$LungCap)
+cov(lungdata$Age, lungdata$LungCap)
+# What is the difference between correlation and covariance?
+```
+
+STEP 6. WRITE DOWN THE MODEL WE ARE FITTING WHEN WE DO A LINEAR REGRESSION OF "LUNGCAP" ON "AGE" USING BETA0, AND BETA1 WHERE NECESSARY.
+
+$LungCap_i = \beta_0 + \beta_1Age_i + \epsilon_i$ 
+
+Make sure you understand what $\beta_0$ and $\beta_1$ mean!
+
+STEP 7. INTERPRET THE RESULTS OF THE LINEAR REGRESSION
+```{r}
+model1 <- lm(lungdata$LungCap ~ lungdata$Age, data = lungdata)
+summary(model1)
+```
+
+STEP 8. INTERPRET THE MEANING OF THE COEFFICIENT ESTIMATES (BOTH INTERCEPT AND COEFFICIENTS ON "AGE") 
+
+1. Usually, we don't interprete the intercept.  
+2. The coefficient on the IV (B1) means the one-year change in age is associated with 0.545 higher expected (or say, predicted) lung capacity.
+
+STEP 9. EXPLORE THE RELATIONSHIP BETWEEN GENDER AND LUNG CAPACITY (MODEL, SCATTERPLOT & INTERPRET COEFFICIENT)
+```{r}
+#Please type your code here!
+```
+
+
+
