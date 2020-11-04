@@ -1,0 +1,104 @@
+---
+title: "Section 5"
+author: "Alice Lepissier"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Review
+
+We won't be learning any new code this week. Instead, we will focus on solidifying the knowledge we have. 
+
+These are the things you should know how to do in order to be a competent data analyst:
+
+* **Set your working directory and load your data-set**.
+
+* **Get a big picture of your data-set**. How many variables do you have? What is your sample size? What units are your variables in (e.g. dollars or thousands of dollars)? The "codebook" is a valuable asset here. *Always* read the description of your variables before you start coding. Use your common sense. Is it likely that GDP per capita in any given country is \$3? Is it not more likely that it would be \$3,000 per capita?
+
+* **Produce some summary statistics**. What is the mean of your variable of interest? What is the standard deviation?
+
+* **Look at the sampling distribution of your data**. Plot histograms, boxplots, and density plots. Know how to recognize skewness in your data. If your data *is* skewed, you should be able to say whether it is right or left-skewed.
+
+* **State which is your dependent and independent variable**. Using your substantive knowledge of the topic, or using the prompts given by a problem - you need to be able to say which variable is the dependent (also known as response or outcome) variable, and which is the independent (also known as explanatory or predictor) variable.
+
+* **Create a scatterplot and add a trend line**. Remember that the order of the variables changes! We write ```plot(X_variable, Y_variable)``` but we write ```lm(Y_variable, X_variable)```.
+
+* **Specify your null and alternative hypotheses**. We will practice this in section today. The null hypothesis is most often testing whether your slope coefficient $\beta_1$ is equal to 0. But remember that is merely the skeleton. We need to add some meat to those bones, and state in terms of our variables what the null hypothesis is.
+
+* **Interpret your regression coefficients**. Again, use full sentences and interpret your coefficients in terms of the units your variable is in. Saying that a 1-unit shift in X is associated with a $\beta_1$ shift in Y is *the bare minimum*.
+
+* **Say whether your coefficient is substantively significant**. Say you run a regression of income (in thousands of dollars) on years of education. That is, you estimate $Income_i = \beta_0 + \beta_1YearsEduc_i + \epsilon_i$. You find an estimated coefficient of $\hat{\beta_1} = 0.002$. This means that an additional year of education is associated with an additional $0.002*1000 = 2$ dollars of income. (Make sure you know why I multiplied by 1,000. Hint hint: look at my DV's units). So to get earn an additional $100 a year, how many more years of education would you need? Is this coefficient substantively significant? In other words, if I told you that you had to stay in school another 50 years to earn 100 bucks more a year, would you do it? Didn't think so.
+
+* **Interpret your p-value and say whether your coefficient is statistically significant**. If your p-value is less than 0.05, you can say that you "reject the null hypothesis of [*state what your null is*] at conventional levels of significance". If your p-value is greater than 0.05, you "fail to reject the null hypothesis". Remember: you *never* accept the null hypothesis - you only "fail to reject it".
+
+* **Know what type of research design would allow you to make causal claims**. Does your data come from an observational study? Or does it come from a randomized experiment?
+
+
+## Let's practice
+```{r}
+setwd("C:/Users/Alice/Box Sync/PhD/Teaching/POLS 15 Introduction to Research Design_Spring 2020/UCSB_POLS15/Section 5")
+load("WDI.Rdata")
+```
+
+```{r}
+plot(WDI$GvtExpendEduc, WDI$PropFemaleParliament,
+     xlab = "Government expenditure on education (% of GDP)",
+     ylab = "% of seats held by women in national parliaments",
+     main = "Gender parity in legislatures as a function of education")
+model1 <- lm(PropFemaleParliament ~ GvtExpendEduc, data = WDI)
+summary(model1)
+abline(model1, col = "darkorchid", lwd = 2)
+```
+
+
+```{r, message = FALSE, warning = FALSE}
+library(datasets)
+attach(USArrests)
+USArrests <- USArrests
+#help(USArrests)
+
+plot(USArrests$UrbanPop, USArrests$Assault,
+     xlab = "Percent urban population",
+     ylab = "Assault arrests (per 100,000)",
+     main = "Violent crime as a function of urban density in the US in 1973")
+model2 <- lm(Assault ~ UrbanPop, data = USArrests)
+summary(model2)
+abline(model2, col = "blue", lwd = 2)
+```
+
+
+```{r, message = FALSE, warning = FALSE}
+#install.packages("pscl")
+library(pscl)
+attach(RockTheVote)
+RockTheVote <- RockTheVote
+#help(RockTheVote)
+
+plot(RockTheVote$treated, RockTheVote$p,
+     xlab = "Treated with Rock The Vote ads",
+     ylab = "Proportion of 18 and 19 year olds turning out",
+     main = "Voter turnout experiment")
+model3 <- lm(p ~ treated, data = RockTheVote)
+summary(model3)
+abline(model3, col = "chartreuse", lwd = 2)
+```
+
+You can find other data-sets to experiment with here: https://vincentarelbundock.github.io/Rdatasets/datasets.html. Beware though that not all are appropriate for linear regression.
+
+There are lots of cool data-sets to explore, like this one on the Titanic:
+
+```{r, message = FALSE, warning = FALSE}
+#install.packages("vcd")
+library(vcd)
+attach(Lifeboats)
+Lifeboats <- Lifeboats
+#help(Lifeboats)
+plot(Lifeboats$cap, Lifeboats$total,
+     xlab = "Capacity of lifeboat",
+     ylab = "Number of passengers on lifeboat",
+     main = "Were the lifeboats on the Titanic filled to capacity?")
+mtext("Could Jack have survived?!")
+```

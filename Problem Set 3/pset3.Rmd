@@ -1,0 +1,90 @@
+---
+title: "Problem Set 3 (Due 8 November)"
+author: "Prof. Matto Mildenberger, PS 15, UCSB"
+date: "Fall 2020"
+output: html_document
+---
+
+*Submit your HTML output and .Rmd file to Gauchospace by the deadline.*
+
+# Introduction: Reminders about R and Rmarkdown
+It is best to work will small amounts of code at a time: get some code working, copy it into the rmd as a code chunk, write your text answer (outside the code chunk) if needed, and check that the file will still knit properly. Do not proceed to answer more questions until you get the first bit working. If you knit everytime you try to write some new code, you'll know where the error is (in the last thing you did!) This will save you huge headaches. 
+
+Although the questions break up each task for you into parts, remember that you might need to put a bunch of code together into a single chunk to make it work. For example, if you create a density plot in one part of a question, and want to add the mean value to it as a line in another part, you need these two commands to follow one another in the same chunk of code.
+
+Some tips: Start early, work with friends in the class (using the chatroom to find study partners if needed!), use the discussion forum, watch lecture videos, attend Zoom sections, go to office hours if you need to, read the textbook and other readings -- do all these things and you'll succeed! Good luck.
+
+***
+
+## Question 1. Democracy and GDP (5 points total)
+
+First, we will load the same dataset (derived from Fearon and Laitin, 2003) that you used in the last problem set.
+
+(a) Set your working directory and load the data.
+
+We will deal mainly with two variables: `polity2l` and `gdpenl`.  The `polity2l` variable is a whole number between -10 and 10,  measuring where a country falls between full autocracy (-10) and full democracy (10). The variable `gpdenl` measures of the GDP per capita of each country in 1960 in thousands of dollars.
+
+(b) Produce a scatter plot with `polity2l` on the horizontal access and `gdpenl` on the vertical axis and use the `abline` command to put the linear regression line on the plot. Given how you have set up your plot, which is your independent variable and which is your dependent variable? 
+**Bonus (1/2 point)**: explain why the data looks how it does along the x-axis, where the data points are all lined up--specifically, what kind of variable is `polity`?
+
+(c) Estimate and report both the covariance and the correlation of `polity2l` and `gdpenl`. Write the meaning of what these results tell you, using the meaning for these two variables (stated above).
+
+(d) Write down the model that we are fitting when we do a linear regression of `gdpenl` on `polity2l`, using $\beta_0$ and $\beta_1$ where necessary. What does the $\beta_{0}$ mean? What does the $\beta_1$ mean? *You do not have to estimate the model yet so this is not in a code chunk.*
+
+(e) Explain how we will estimate the best values of $\beta_0$ and $\beta_1$. In what sense is the line that we choose (by choosing $\beta_0$ and $\beta_1$) the "best-fitting" line?
+
+(f) Now use linear regression to regress `gdpenl` on `polity2l` using the `lm()` function in `R` - make sure you save the model as an object. Show the result using the `summary()` command. Interpret the meaning of the coefficient estimates (both the intercept and the coefficients on `polity2l`). 
+**Bonus (1/2 point)**: Consider the p-values reported on the table in your interpretation, if you want to read ahead and figure out what these mean.
+
+(g) Sometimes we need to transform a variable to make it more suitable to analysis by regression. For example, with income-related variables like `gdpenl`, we usually need to take their log first before using regression. Create a new variable that is equal to the log of `gpdenl`.
+
+(h) Now remake a scatter plot like before but with `polity2l` on the horizontal access and the log of `gdpenl` on the vertical axis. Add the regression line using `abline()`.
+
+It turns out that when you regress a logged dependent variable on an (unlogged) independent variable, we can roughly interpret the coefficient $\beta$ as meaning "a one-unit shift in the independent variable corresponds to a 100$\beta$ *percent* increase in the dependent variable." 
+
+For example, a $\beta$ of 0.01 from such a regression would imply that a one-unit change in the independent variable is associated with a $1\%$ higher value of the dependent variable.  (This is just an approximation, but for coefficient estimates near zero, it is okay.)
+
+(i) Using this knowledge, re-run your regression but now regress the (log of) `gdpenl` on `polity2l`. Use `summary()` to show the results. Interpret the new coefficient on `polity2l`. How has it changed compared to your earlier regression? Would you say your results are robust? 
+**Bonus (1/2 point)**: Interpret the new p-value.
+
+(j) Regardless of what you actually got in the above analyses, suppose that we find a positive and statistically significant coefficient in these regressions. Does this warrant the conclusion that "being more democratic (having a higher polity score) increases a country's GDP per capita?" Why or why not? Follow the instructions in class for how to address such causal questions, including pointing out potential confounders, non-comparability, and proposing the ideal research design. 
+
+***
+
+## Question 2. Climate change (2 points total)
+
+Begin by loading a new dataset (`Tempdata.RData`) into R. This dataset shows the average temperature of Los Angeles for the month of October from 1944 to 2015. 
+
+(a) Make a scatterplot of temperature over time. Add a trend line. What does it tell us about how the climate is changing over time? 
+
+(b) Next, subset the data into groups by decade. Start with the seventies, and then create subsets for the eighties, nineties, noughts, and 2010-2015. What is the mean temperature for each decade? What is the standard deviation for each decade? What is the trend over time in the mean and the standard deviation? 
+
+**Bonus (1/2 point)**: Why is understanding changes in temperature variation, not just average temperature, important for understanding the consequences of climate change? What does a change in the variance of temperature mean for society can plan?
+
+***
+
+## Question 3. The Butterfly did it (2 points total)
+
+Read the assigned article for this section of the course, Wand et al., "The Butterfly Did It." Focus on the: abstract, introduction, figures, tables and conclusion. You don't need to read every word, but you do need to understand the argument and evidence. This is a very important article written in the discipline's top journal (APSR), so it should give you a good example of how we use statistics in practice to answer questions about politics. Note: they use a slightly different regression model (estimator) than we are discussing in class, but it is a similar enough approach that you should be able to follow the overall argument.
+
+(a) In your own words, state the authors' research question. Are they trying to answer a causal question?
+
+(b) What is their independent variable? What is their dependent variable?
+
+(c) Examine Figure 3. What could you call Palm Beach County (PBC)? Why? (Use a key term we've learned in the course.)
+
+(d) What is the main finding from the paper? In other words, how do the authors answer their research question? What is the main evidence they use to make this claim? Put this in your own words.
+
+(e) Examine Table 4. In Palm Beach County, how much more likely was it for a person casting a ballot for the Democratic Senator candidate to also vote for Buchanan on (i) election day; versus, (ii) absentee? What explains this difference in probability according to the authors? Note: this is a simple calculation if you read and understand the table.
+
+***
+
+## Question 4. Helping out your friends (1 point total)
+
+In your latest social-distancing-friendly video hangout session, let's say you mentioned to your friend that you're learning some really neat stuff in PS 15. Now they're curious. They want to know how they too can figure out relationships in the political world.
+
+(a) Your friend asks how correlation is different from covariance, and for a formula that can turn $cov(x,y)$ into $cor(x,y)$. Provide that formula, and explain how correlation relates to covariance. Also explain what the correlation means and the possible values it can take. 
+
+(b) Your friend asks you to explain what a random variable is. In your own words, provide a definition. What are its key components?
+
+(c) Your friend then says they have heard of linear regression before, but they don't know how it works. Explain in simple language what the regression is doing to estimate a relationship between two variables. Come up with a specific political science example to help your friend understand.
