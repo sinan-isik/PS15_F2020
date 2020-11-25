@@ -1,0 +1,160 @@
+---
+title: "PS 15 Section 8 - Multivariate regression (part 2)"
+output: html_document
+---
+
+## REMINDERS
+1. KNIT AS YOU GO!
+2. ALWAYS SET YOUR WORKING DIRECTORY FIRST
+3. MAKE SURE YOU KNOW WHAT YOUR VARIABLES ARE (X and Y, ORDER MATTERS)
+
+0. Clear your workspace.
+```{r}
+rm(list = ls())
+# This removes everything in your environment
+```
+
+### 1. Set your working directory and load the congressional elections data (`vote_data.RData`).
+```{r}
+#setwd()
+load("vote_data.RData")
+```
+
+Take a look at what's inside. 
+
+Unit of analysis: incumbent-election, i.e. each row is an congressional incumbent's performance in an election.
+
+Variable Name  | Description 
+-------------  | ------------------------------------------------------------------ 
+year           | year of the election
+cong           | session of Congress prior to the election
+idno           | unique ICPSR identifier for each incumbent
+stcd           | unique idenitifier indicating the state and the congressional district
+ov             | the share of two-party votes for the incumbent (if the district was contested by a Democrat and a Republican).  It is on a scale of 0-100.
+ovp            | the share of two-party votes for the incumbent in the last election (if the district was contested by a Democrat and a Republican).  It is on a scale of 0-100.
+opres          | two party share of presidential votes for the incumbent's party.  In the concurrent presidential election if presidential year; two years previous if a midterm. It is on a scale of 0-100.
+ownexp         | campaign spending by the incumbent, in nominal dollars
+oppexp         | campaign spending by the challenger, in nominal dollars
+state          | state name
+frosh          | freshman incumbent, facing first reelection effort
+quality        | one of the candidates is an incumbent and is facing a challenger with previous experience in an elective office
+incwin2        | incumbent victory dummy
+stcd_redist    | stcd coupled with redistricting indicator. The last digit is 1 if the district was redistricted since the last election; 0 otherwise.
+moddwnom1      | Incumbent's voting record (based on dw-nominate).  1 means extreme in the direction of the rest of his party (e.g. an extreme liberal for a Dem), -1 means extreme opposite the direction of his party (e.g.  an extreme liberal for a Rep).
+
+
+### 2. How many **unique** incumbents/candidates ("idno") are in the data-set?
+
+First have a look at your idno variable. Print it out to the console (do NOT knit it):
+```{r}
+#vote_data$idno  #delete the #sign to run the code
+```
+You can immediately tell that the ID numbers are repeated sometimes. We don't care about the duplicates, so we can use the `unique()` function which returns the non-repeating elements in a vector. The `length()` command tells you how many elements are in vector. Thus, we can combine the two functions to get the **number of unique candidates** in the data-set. 
+
+```{r}
+length(unique(vote_data$idno))
+# Hint: unpack this command and print it out to the console
+```
+
+
+### 3. What is the average number of incumbents in the dataset across the years?
+```{r}
+# Average number of incumbents across the years (average times each year showing up in this dataset)
+mean(table(vote_data$year))
+```
+
+Let's unpack this code. The `table()` provides a count of how many times each year shows up in the dataset. Because each observation here is an incumbent's election, this essentially creates a table of the number of incumbents for each year.
+
+```{r}
+table(vote_data$year)
+```
+
+We can then average the number of incumbents across the years by applying the `mean()` function to that.
+```{r}
+mean(table(vote_data$year))
+```
+
+### Another example using `table()`.
+
+The variable incwin2 is a dummy variable for whether the incumbent won or lost.
+
+```{r}
+table(vote_data$incwin2)
+```
+The `prop.table()` command will give you proportions. Hint: remember that you can type `?prop.table()` in your console to get further information about R commands.
+
+```{r}
+prop.table(table(vote_data$incwin2))
+```
+
+### 4. Did incumbents outspend their opponents or not? 
+
+Let us create a new binary variable that is equal to 1 if the opponent outspent an incumbent and 0 otherwise.
+
+```{r}
+vote_data$outspent <- ifelse(vote_data$oppexp > vote_data$ownexp, 1, 0)
+```
+
+Let us unpack this code. The syntax of the `ifelse()` function is `ifelse(condition, if condition is TRUE, if condition is FALSE)`.
+
+Recall that `oppexp` is the expenditure by the opponent, and that `ownexp` is the expenditure by the incumbent.
+
+The condition is always a logical statement. Let us print it to our console and see what happens (again, do NOT knit it):
+```{r}
+#vote_data$oppexp > vote_data$ownexp
+```
+
+Therefore, if the *condition evaluates to TRUE*, that is, if the opponent outspent the incumbent, our dummy variable `outspent` will be equal to 1. Otherwise, it will be equal to 0.
+
+(In problem set 5 you will use a similar command, but your variable is a factor. Check leture slides for how to handle factors).
+Hint: you can access more information about **operator/logical operator** via this link https://www.statmethods.net/management/operators.html.
+
+### 5. Do most opponents outspend incumbents?
+```{r}
+table(vote_data$outspent)
+```
+We can see that most opponents DON'T outspend incumbents (0 = 4920, and 1 = 484).
+
+What percentage of incumbents are outspent by their opponents?
+```{r}
+prop.table(table(vote_data$outspent))
+```
+
+
+### 6. Run a regression to figure out if outspending results in a higher vote share.
+```{r}
+model1 <- lm(ov ~ outspent, data = vote_data)
+summary(model1)
+# ov: the share of two party votes for the incumbent
+```
+
+
+### 7. Do the same but add some controls.
+```{r}
+model2 <- lm(ov ~ outspent + moddwnom1 + frosh, data = vote_data)
+summary(model2)
+#moddwnom1: Incumbent's voting record (based on dw-nominate).  1 means extreme in the direction of the rest of his party (e.g. an extreme liberal for a Dem), -1 means extreme opposite the direction of his party (e.g.  an extreme liberal for a Rep).
+# frosh: freshman incumbent, facing first reelection effort
+```
+
+### 8. What is the predicted DV for a hypothetical freshman incumbent whose outspent their opponents, and "moddwnom1" level of 1?
+
+```{r}
+#One method: plug in numbers for each IV to get DV
+65.0411+(-9.2151)*1 +4.5491*1+ -2.9451*1  #57.43
+```
+```{r}
+#Another method: use predict()
+predict(model2, newdata = data.frame(outspent=1, frosh=1,moddwnom1=1))
+#same result:57.43004 
+
+```
+
+### Bonus: Add a list of predicted DVs to your dataset and make a plot with the predicted DV values
+```{r}
+#There are a couple of ways of doing this. 
+vote_data$fit<-predict(model2)
+vote_data$fit2<-fitted.values(model2)
+plot(vote_data$fit~vote_data$outspent,xlab="Whether incumbent outspent opponents",ylab="Predicted voteshare")
+```
+
